@@ -43,14 +43,14 @@ InterruptHandler.o: InterruptHandler.cc
 ButtonSource.o: ButtonSource.cc
 	$(CLANG) $(TARGET) $(CPP_FLAGS) -g -c -o ButtonSource.o ButtonSource.cc
 
-ButtonObserver.o: ButtonObserver.cc
-	$(CLANG) $(TARGET) $(CPP_FLAGS) -g -c -o ButtonObserver.o ButtonObserver.cc
+Timer.o: Timer.cc
+	$(CLANG) $(TARGET) $(CPP_FLAGS) -g -c -o Timer.o Timer.cc
 
 unit.o: unit.s
 	$(CLANG) $(TARGET) $(CPP_FLAGS) -g -c -o unit.o unit.s
 	
-main.elf: main.o unit.o LEDDisplay.o SysTick.o UART.o Button.o RunLoop.o Source.o Observer.o InterruptHandler.o ButtonObserver.o ButtonSource.o
-	$(CLANG) $(TARGET) $(LDD_FLAGS) -T main.ld -o main.elf main.o unit.o LEDDisplay.o UART.o SysTick.o Button.o RunLoop.o Source.o Observer.o InterruptHandler.o ButtonObserver.o ButtonSource.o
+main.elf: main.o unit.o LEDDisplay.o SysTick.o UART.o Button.o RunLoop.o Source.o Observer.o InterruptHandler.o ButtonSource.o Timer.o
+	$(CLANG) $(TARGET) $(LDD_FLAGS) -T main.ld -o main.elf main.o unit.o LEDDisplay.o UART.o SysTick.o Button.o RunLoop.o Source.o Observer.o InterruptHandler.o ButtonSource.o Timer.o
 
 main.hex: main.elf
 	$(OBJ_COPY) -O ihex $< $@
