@@ -13,7 +13,7 @@ CLANG := /Applications/LLVMEmbeddedToolchainForArm-17.0.1-Darwin/bin/clang++
 OBJ_COPY := /Applications/LLVMEmbeddedToolchainForArm-17.0.1-Darwin/bin/llvm-objcopy
   
 
-LEDDisplay.o: LEDDisplay.cc
+LEDDisplay.o: LEDDisplay.cc LEDDisplay.h
 	$(CLANG) $(TARGET) $(CPP_FLAGS) -g -c -o LEDDisplay.o LEDDisplay.cc
 
 UART.o: UART.cc
@@ -46,11 +46,14 @@ ButtonSource.o: ButtonSource.cc
 Timer.o: Timer.cc
 	$(CLANG) $(TARGET) $(CPP_FLAGS) -g -c -o Timer.o Timer.cc
 
+ImageMatrix.o: ImageMatrix.cc
+	$(CLANG) $(TARGET) $(CPP_FLAGS) -g -c -o ImageMatrix.o ImageMatrix.cc
+
 unit.o: unit.s
 	$(CLANG) $(TARGET) $(CPP_FLAGS) -g -c -o unit.o unit.s
 	
-main.elf: main.o unit.o LEDDisplay.o SysTick.o UART.o Button.o RunLoop.o Source.o Observer.o InterruptHandler.o ButtonSource.o Timer.o
-	$(CLANG) $(TARGET) $(LDD_FLAGS) -T main.ld -o main.elf main.o unit.o LEDDisplay.o UART.o SysTick.o Button.o RunLoop.o Source.o Observer.o InterruptHandler.o ButtonSource.o Timer.o
+main.elf: main.o unit.o LEDDisplay.o SysTick.o UART.o Button.o RunLoop.o Source.o Observer.o InterruptHandler.o ButtonSource.o Timer.o ImageMatrix.o
+	$(CLANG) $(TARGET) $(LDD_FLAGS) -T main.ld -o main.elf main.o unit.o LEDDisplay.o UART.o SysTick.o Button.o RunLoop.o Source.o Observer.o InterruptHandler.o ButtonSource.o Timer.o ImageMatrix.o
 
 main.hex: main.elf
 	$(OBJ_COPY) -O ihex $< $@

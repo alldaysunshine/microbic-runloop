@@ -1,19 +1,22 @@
 #import "SysTick.h"
+#import "ImageMatrix.h"
 
 class LEDDisplay {
 	private: 
 		
 		int currentRow = 0;
-		
 		int row_bits[5] = {21, 22, 15, 24, 19};
-		
-		int matrix[5][5];
+
+				
+		ImageMatrix matrix;
 		
 		SysTick* systick;
 	public: 
+		int columnOffset = 0; 
+
     	LEDDisplay(SysTick& systick);
 		
-		void set(int (*array)[5][5]); 
+		void display(ImageMatrix matrix); 
 		
 		
 		void strobeNextRow();

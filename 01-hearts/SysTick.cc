@@ -10,7 +10,7 @@ SysTick::SysTick() {
 
 void SysTick::enable() {
 	// Set clock
-	PUT32(STRVR, 10000);
+	PUT32(STRVR, 300000);
 	PUT32(STCSR, 11);
 }
 

@@ -1,7 +1,16 @@
 
+#import <vector>
 
 class ImageMatrix {
+
 	public: 
-		unsigned int matrix; 
-		ImageMatrix(unsigned int m); 
+		std::vector<unsigned char> matrix; 
+
+		unsigned int columns; 
+		unsigned int rows; 
+		
+		unsigned int bytesPerRow; 
+		
+		ImageMatrix(); 
+		ImageMatrix(unsigned int _columns, unsigned int _rows); 
 };
