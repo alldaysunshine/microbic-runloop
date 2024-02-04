@@ -3,7 +3,8 @@
 
 extern UART uart; 
 
-Observer::Observer(std::function<void(Event*)> c) {
+Observer::Observer(unsigned int _event_mask, std::function<void(Event*)> c) {
+	event_mask = _event_mask;
 	callback = c; 
 }
 

@@ -1,8 +1,5 @@
 #include "AsmBridge.h"
 #include "RunLoop.h"
-#include "UART.h"
-#include "Source.h"
-#include "Observer.h"
 #include "Event.h"
 #include "Timer.h"
 
@@ -38,6 +35,7 @@ void RunLoop::addSource(Source& source) {
 	sources.push_back(&source);
 }
 
+
 void RunLoop::runAfter(unsigned int delay, std::function<void()> function) {
 	ScheduledBlock *block = new ScheduledBlock; 
 	
@@ -62,11 +60,14 @@ void RunLoop::processNextEvent() {
 	
 	if (ready) {
 		for (auto it = observers.begin(); it != observers.end(); ++it) {
-			(*it)->notify(event);
+			if ((*it)->event_mask & event->event_id) {
+				(*it)->notify(event);
+			}
 		}
 		delete event;
 	}
 }
+
 
 void RunLoop::processScheduledBlocks() {
 	auto it = scheduledBlocks.begin(); 

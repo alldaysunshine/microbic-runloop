@@ -50,17 +50,13 @@ int animationCounter = 0;
 
 std::function<void(void)> animationCallback; 
 	
-Observer observer([](Event * event) {
+Observer observer(BUTTON_EVENT, [](Event * event) {
 	if (event->state == 1) {
 		animationRunning = false; 
 		animationCounter = 0; 
 		display.columnOffset = 0; 
+		display.display(smallHeartMatrix);
 		
-		display.display(bigHeartMatrix);
-
-		runloop.runAfter(200, []() {
-			display.display(smallHeartMatrix);
-		});
 		runloop.runAfter(400, []() {
 			display.display(bigHeartMatrix);
 		});
@@ -73,14 +69,14 @@ Observer observer([](Event * event) {
 		runloop.runAfter(1200, []() {
 			display.display(smallHeartMatrix);
 		});
-		runloop.runAfter(1400, []() {
+		runloop.runAfter(1600, []() {
 			display.display(bigHeartMatrix);
 		});
-		runloop.runAfter(1600, []() {
+		runloop.runAfter(2000, []() {
 			animationRunning = true; 
 			animationCounter = 0; 
 			display.display(startMatrix);
-		});
+		}); 
 	} 
 }); 
 

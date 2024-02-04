@@ -19,6 +19,7 @@ bool ButtonSource::ready() {
 			trackedState = 0; 
 	
 			Event* event = new Event(); 
+			event->event_id = BUTTON_EVENT; 
 			event->state = 0; 
 			eventQueue.push(event);
 		}
@@ -54,11 +55,25 @@ void ButtonSource::handleInterrupt() {
 	unsigned int downState = GET32(r);
 
 	if (downState) {
-		Event* event = new Event(); 
-		event->state = 1; 
-		eventQueue.push(event);
+		// Add button up first
+		if (trackedState == 1) {
+			Event* eventUp = new Event(); 
+			eventUp->event_id = BUTTON_EVENT; 
+			eventUp->state = 0; 
+			eventQueue.push(eventUp);
 		
-		trackedState = 1; 
+			Event* eventDown = new Event(); 
+			eventDown->event_id = BUTTON_EVENT; 
+			eventDown->state = 1; 
+			eventQueue.push(eventDown);
+		} else {
+			Event* event = new Event(); 
+			event->event_id = BUTTON_EVENT; 
+			event->state = 1; 
+			eventQueue.push(event);
+		
+			trackedState = 1; 
+		}
 	}
 	
 	PUT32(r, 0);

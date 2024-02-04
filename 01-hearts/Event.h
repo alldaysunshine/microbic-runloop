@@ -1,5 +1,9 @@
+
+#define BUTTON_EVENT 1
+
 class Event {
 	public: 
-		int id; 
+		int event_id; 
+
 		int state; 
 };
