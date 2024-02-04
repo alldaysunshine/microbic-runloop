@@ -34,7 +34,7 @@ Event* ButtonSource::consumeEvent() {
 
 
 void ButtonSource::enableInterrupt() {
-	PUT32(GPIOTE_INTENSET0, 0b1); 
+	PUT32(GPIOTE_INTENSET0, 0b11); 
 	PUT32(0xE000E100, (1 << 6));
 }
 
@@ -49,7 +49,9 @@ void ButtonSource::enableInterrupt() {
  * via the RunLoop as soon as we get an interrupt from a button down event.
  */
 void ButtonSource::handleInterrupt() {
-	unsigned int downState = GET32(GPIOTE_IN0);
+	unsigned int r = this->button->location == ButtonA ? GPIOTE_IN0 : GPIOTE_IN1; 
+	
+	unsigned int downState = GET32(r);
 
 	if (downState) {
 		Event* event = new Event(); 
@@ -59,11 +61,11 @@ void ButtonSource::handleInterrupt() {
 		trackedState = 1; 
 	}
 	
-	PUT32(GPIOTE_IN0, 0);
+	PUT32(r, 0);
 }
 
 void ButtonSource::disableInterrupt() {
-	PUT32(GPIOTE_INTENCLR0, 0b1); 
+	PUT32(GPIOTE_INTENCLR0, 0b11); 
 	PUT32(0xE000E100, (1 << 6));
 }
 

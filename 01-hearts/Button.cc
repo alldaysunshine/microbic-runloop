@@ -8,29 +8,47 @@
 #define GPIOTE_CONFIG0 0x40006510
 #define GPIOTE_CONFIG1 0x40006514
 
+#define BUTTON_A_PIN 14
+#define BUTTON_B_PIN 23
 
-Button::Button( ) {
-	
+Button::Button(ButtonLocation _location) {
+	location = _location; 
 }
 
 void Button::enable() {
-	unsigned int device_pin = (1 << 14); // Button 1; 
+	if (location == ButtonA) {
+		PUT32(GPIO_DIRCLR0, (1 << BUTTON_A_PIN)); // Configure button as input
 	
-	PUT32(GPIO_DIRCLR0, device_pin); // Configure button as input
+		PUT32(GPIO_CNF0 + 4 * BUTTON_A_PIN, 
+			0 << 0 |
+			1 << 1 |
+			0 << 2 |
+			0 << 8 |
+			0 << 16
+			);
+			
+		PUT32(GPIOTE_CONFIG0,
+			1 << 0 |
+			BUTTON_A_PIN << 8 |
+			2 << 16
+		); 
+	} else {
+		PUT32(GPIO_DIRCLR0, (1 << BUTTON_B_PIN)); // Configure button as input
 	
-	PUT32(GPIO_CNF0 + 4 * 14, 
-		0 << 0 |
-		1 << 1 |
-		0 << 2 |
-		0 << 8 |
-		0 << 16
-		);
-	
-	PUT32(GPIOTE_CONFIG0,
-		1 << 0 |
-		14 << 8 |
-		2 << 16
-	); 
+		PUT32(GPIO_CNF0 + 4 * BUTTON_B_PIN, 
+			0 << 0 |
+			1 << 1 |
+			0 << 2 |
+			0 << 8 |
+			0 << 16
+			);
+			
+		PUT32(GPIOTE_CONFIG1,
+			1 << 0 |
+			BUTTON_B_PIN << 8 |
+			2 << 16
+		); 
+	}
 }
 
 void Button::clear() {
@@ -39,7 +57,7 @@ void Button::clear() {
 
 
 bool Button::state() {
-	unsigned int device_pin = (1 << 14); // Button 1; 
+	unsigned int device_pin = (location == ButtonA ? (1 << BUTTON_A_PIN) : (1 << BUTTON_B_PIN)); 
 
 	unsigned int state = GET32(GPIO_IN0);
 	

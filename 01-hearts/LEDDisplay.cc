@@ -11,7 +11,7 @@
 
 #define GET_BIT(m, row, col) \
 	(((col + columnOffset) > m.columns - 1 || (col + columnOffset) < 0) ? 0 : \
-		CHECK_BIT(GET_BYTE(matrix, currentRow, col + columnOffset), (col + columnOffset) % 8) \
+		CHECK_BIT(GET_BYTE(matrix, currentRow, col + columnOffset), 7 - (col + columnOffset) % 8) \
 	 )
 	
 
@@ -28,12 +28,12 @@ void LEDDisplay::strobeNextRow() {
 	PUT32(GPIO_OUTCLR0, LED_MASK0);
  	PUT32(GPIO_OUTCLR1, LED_MASK1);
 	
-	PUT32(GPIO_OUTSET1, (!GET_BIT(matrix, currentRow, 1) << 5));
+	PUT32(GPIO_OUTSET1, (!GET_BIT(matrix, currentRow, 3) << 5));
 	PUT32(GPIO_OUTSET0, (1 << row_bits[currentRow]) | 
-	  	(!GET_BIT(matrix, currentRow, 4) << 28) | 
-	  	(!GET_BIT(matrix, currentRow, 3) << 11) | 
+	  	(!GET_BIT(matrix, currentRow, 0) << 28) | 
+	  	(!GET_BIT(matrix, currentRow, 1) << 11) | 
 	  	(!GET_BIT(matrix, currentRow, 2) << 31) | 
-	  	(!GET_BIT(matrix, currentRow, 0) << 30));
+	  	(!GET_BIT(matrix, currentRow, 4) << 30));
 	  
 	currentRow = (currentRow + 1) % 5;
 }

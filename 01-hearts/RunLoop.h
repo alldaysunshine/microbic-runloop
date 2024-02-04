@@ -11,7 +11,7 @@ class RunLoop {
 		std::vector<Source*> sources;
 		std::vector<Observer*> observers;
 		
-		std::vector<ScheduledBlock> scheduledBlocks;
+		std::vector<ScheduledBlock*> scheduledBlocks;
 		
 		unsigned int eventCounter = 0; 
 		unsigned int runloopTime = 0; 

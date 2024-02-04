@@ -1,15 +1,23 @@
 
+enum ButtonLocation {
+	ButtonA, 
+	ButtonB
+};
+
+
 class Button {
 	private: 
-		unsigned int counter = 0; 
-		
+				
 	public: 
-    	Button();
+		ButtonLocation location; 
+
+    	Button(ButtonLocation _location);
 
 		void enable();
 		void disable(); 
 		
 		bool state();
+		
 		void clear();
 };
 
