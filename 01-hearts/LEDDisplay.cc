@@ -15,9 +15,13 @@
 	 )
 	
 
+LEDDisplay& LEDDisplay::getInstance() {
+	static LEDDisplay instance; // Guaranteed to be destroyed.
+						  // Instantiated on first use.
+	return instance;
+}
 
-LEDDisplay::LEDDisplay(SysTick& systick) {
-	this->systick = &systick; 
+LEDDisplay::LEDDisplay() {
 }
 
 void LEDDisplay::display(ImageMatrix _m) {

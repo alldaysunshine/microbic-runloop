@@ -3,16 +3,16 @@
 
 class LEDDisplay {
 	private: 
+		LEDDisplay(); 
+		
 		int currentRow = 0;
 		int row_bits[5] = {21, 22, 15, 24, 19};
 
 		ImageMatrix matrix;
-		
-		SysTick* systick;
 	public: 
-		int columnOffset = 0; 
+        static LEDDisplay& getInstance();
 
-    	LEDDisplay(SysTick& systick);
+		int columnOffset = 0; 
 		
 		void display(ImageMatrix matrix); 
 		

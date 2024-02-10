@@ -27,6 +27,7 @@ repeat:
     bhi repeat
     bx lr
 
+
 .thumb_func
 .globl led_setup
 led_setup:
@@ -59,3 +60,15 @@ led_off:                          @ Delay in microseconds (64MHz clock)
 .globl timer_on
 timer_on:                          @ Delay in microseconds (64MHz clock)
     bx lr
+    
+.thumb_func
+.globl arm_systick_isr
+arm_systick_isr:         
+	PUSH {R4-R11}
+	PUSH {LR} 
+	PUSH {R0}
+	bl display_systick_isr
+	POP {R0}
+	POP {LR} 
+	POP {R4-R11}
+	bx lr

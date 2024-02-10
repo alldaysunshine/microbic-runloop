@@ -7,12 +7,18 @@ RunLoop::RunLoop() {
 	
 }
 
+RunLoop& RunLoop::getMain()
+{
+	static RunLoop instance; // Guaranteed to be destroyed.
+						  // Instantiated on first use.
+	return instance;
+}
+
+
 void RunLoop::run() {
 	Timer timer; 	
 	timer.enable(); 
 	
-	scheduledBlocks.reserve(100);
-
 	while (1) {
 		unsigned int t = timer.value(); 
 		
@@ -20,8 +26,8 @@ void RunLoop::run() {
 
 		processScheduledBlocks(); 
 		processNextEvent(); 
-		
-		delay(100000);
+				
+		// TODO: Improve with timer
 	}
 	timer.disable(); 
 }
@@ -42,7 +48,7 @@ void RunLoop::runAfter(unsigned int delay, std::function<void()> function) {
 	block->runAfter = runloopTime + delay; 
 	block->callback = function; 
 	
-	scheduledBlocks.push_back(block);
+	scheduledBlocks.push(block);
 }
 
 
@@ -70,17 +76,10 @@ void RunLoop::processNextEvent() {
 
 
 void RunLoop::processScheduledBlocks() {
-	auto it = scheduledBlocks.begin(); 
-	
-	while(it != scheduledBlocks.end()) {
-		if (runloopTime > (*it)->runAfter) {
-			(*it)->callback();
-			delete (*it);
-
-	        it = scheduledBlocks.erase(it);
-		} else {
-			++it; 
-		}
+	while(!scheduledBlocks.empty() && runloopTime > scheduledBlocks.top()->runAfter) {
+		scheduledBlocks.top()->callback(); 
+		delete scheduledBlocks.top(); 
+		scheduledBlocks.pop(); 
     }
 }
 

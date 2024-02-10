@@ -3,21 +3,22 @@
 #import "Source.h"
 #import "Observer.h"
 #import "ScheduledBlock.h"
-
+#include <queue>
+#include <list>
 
 
 class RunLoop {
-	private: 
+   private:
+    	RunLoop();
+
 		std::vector<Source*> sources;
 		std::vector<Observer*> observers;
 		
-		std::vector<ScheduledBlock*> scheduledBlocks;
+		std::priority_queue<ScheduledBlock*,std::vector<ScheduledBlock*>,CmpScheduledBlockPtrs> scheduledBlocks;
 		
-		unsigned int eventCounter = 0; 
 		unsigned int runloopTime = 0; 
-		
 	public: 
-    	RunLoop();
+        static RunLoop& getMain();
 
 		void addSource(Source& source);
 		void addObserver(Observer& observer);

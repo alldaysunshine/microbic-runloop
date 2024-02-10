@@ -9,9 +9,12 @@
 
 #define BITMAP_FONT_WIDTH 5
 #define BITMAP_FONT_HEIGHT 5
+
 #define BITMAP_FONT_ASCII_START 32
 #define BITMAP_FONT_ASCII_END 126
+
 #define BITMAP_FONT_SPACE 1
+
 
 ImageMatrix::ImageMatrix(unsigned int _columns, 
 	unsigned int _rows, std::vector<unsigned char> _matrix) {
@@ -22,6 +25,7 @@ ImageMatrix::ImageMatrix(unsigned int _columns,
 	
 	matrix = _matrix; 
 }
+
 
 ImageMatrix::ImageMatrix(unsigned char character) {
 	columns = BITMAP_FONT_WIDTH; 
@@ -35,6 +39,7 @@ ImageMatrix::ImageMatrix(unsigned char character) {
     
 	matrix.assign(start, start + BITMAP_FONT_HEIGHT);
 }
+
 
 ImageMatrix::ImageMatrix(std::string str) {
 	columns = (BITMAP_FONT_WIDTH + BITMAP_FONT_SPACE) * str.length(); 
@@ -70,6 +75,7 @@ ImageMatrix::ImageMatrix(std::string str) {
 		}
 	}
 }
+
 
 ImageMatrix::ImageMatrix() {
 	columns = 54; 

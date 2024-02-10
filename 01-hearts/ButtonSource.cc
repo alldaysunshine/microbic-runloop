@@ -6,16 +6,14 @@
 #define GPIOTE_INTENCLR0 0x40006308
 
 #define GPIOTE_IN0  0x40006100
-#define GPIOTE_IN1  0x40006104
 
 
-ButtonSource::ButtonSource(Button& _button) {
-	this->button = &_button;
+ButtonSource::ButtonSource(Button& _button) : button(_button) {
 }
 
 bool ButtonSource::ready() {
 	if (trackedState == 1) {
-		if (button->state() == 0) {
+		if (button.state() == 0) {
 			trackedState = 0; 
 	
 			Event* event = new Event(); 
@@ -35,7 +33,7 @@ Event* ButtonSource::consumeEvent() {
 
 
 void ButtonSource::enableInterrupt() {
-	PUT32(GPIOTE_INTENSET0, 0b11); 
+	PUT32(GPIOTE_INTENSET0, 1 << button.configuration.gpiote_event_in); 
 	PUT32(0xE000E100, (1 << 6));
 }
 
@@ -50,8 +48,7 @@ void ButtonSource::enableInterrupt() {
  * via the RunLoop as soon as we get an interrupt from a button down event.
  */
 void ButtonSource::handleInterrupt() {
-	unsigned int r = this->button->location == ButtonA ? GPIOTE_IN0 : GPIOTE_IN1; 
-	
+	unsigned int r = (unsigned int)GPIOTE_IN0 + 4 * button.configuration.gpiote_event_in; // button.configuration.gpiote_event_in == 1 ? GPIOTE_IN0 : GPIOTE_IN1; 
 	unsigned int downState = GET32(r);
 
 	if (downState) {

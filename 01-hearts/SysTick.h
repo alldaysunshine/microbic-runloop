@@ -1,9 +1,10 @@
 
 class SysTick {
 	private: 
+    	SysTick();
 
 	public: 
-    	SysTick();
+        static SysTick& getInstance();
 
 		void enable();
 		void disable(); 

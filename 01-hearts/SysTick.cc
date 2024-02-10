@@ -8,6 +8,13 @@ SysTick::SysTick() {
 	
 }
 
+SysTick& SysTick::getInstance()
+{
+	static SysTick instance; // Guaranteed to be destroyed.
+						  // Instantiated on first use.
+	return instance;
+}
+
 void SysTick::enable() {
 	// Set clock
 	PUT32(STRVR, 300000);

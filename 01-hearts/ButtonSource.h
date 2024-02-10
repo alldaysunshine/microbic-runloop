@@ -7,7 +7,7 @@ class ButtonSource : public Source {
 	private: 
 		ButtonSource(const ButtonSource&) = delete;
 
-		Button* button; 
+		Button& button; 
 		std::queue<Event*> eventQueue; 
 		
 		int trackedState = 0; 

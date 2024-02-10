@@ -13,8 +13,8 @@
 
 #import "RunLoop.h"
 
-
 ImageMatrix startMatrix("Welcome >>> Press button >>>");
+
 
 ImageMatrix bigHeartMatrix(5, 5, {
 	0b01010000, 
@@ -33,14 +33,15 @@ ImageMatrix smallHeartMatrix(5, 5, {
 }); 
 
 
-SysTick systick; 
+SysTick& systick = SysTick::getInstance(); 
 
-LEDDisplay display(systick); 
+LEDDisplay display = LEDDisplay::getInstance(); 
 UART uart; 
 
-Button button(ButtonB); 
+Button button(buttonA); 
 
-RunLoop runloop; 
+RunLoop& runloop = RunLoop::getMain(); 
+
 
 ButtonSource buttonSource(button); 
 
@@ -73,14 +74,14 @@ Observer observer(BUTTON_EVENT, [](Event * event) {
 			display.display(bigHeartMatrix);
 		});
 		runloop.runAfter(2000, []() {
-			animationRunning = true; 
-			animationCounter = 0; 
 			display.display(startMatrix);
+			animationCounter = 0; 
+			animationRunning = true; 
 		}); 
 	} 
 }); 
 
-extern "C" void arm_systick_isr() {
+extern "C" void display_systick_isr() {
 	display.strobeNextRow(); 
 }
 
